@@ -84,3 +84,7 @@ text-align: center;
       font-family: Fontb;
       src: url("node_modules/fonts/zrnic.ttf");
     }
+
+.ace_print-margin {
+  display:none!important;
+}   
