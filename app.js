@@ -23,11 +23,18 @@ app.directive('jsTester', ['$compile', function($compile){
 
 			 
                  $scope.compiled = false;
+                 $scope.tester_id = $attrs.id;
+			     $scope.storage_appender = "_js_tester";
 				 $scope.editor = ace.edit("editor");
 			     $scope.editor.setTheme("ace/theme/monokai");
 			     $scope.editor.getSession().setMode("ace/mode/javascript");
 			     $scope.editor_ele = angular.element($element[0].getElementsByClassName("editor"));
-			     $scope.editor_ele.css({"font-size":"13px"});
+			     var _font_size = localStorage.getItem($scope.tester_id + $scope.storage_appender + "_font_size") || 13;
+			     $scope.editor_ele.css({"font-size": _font_size + "px"});
+
+			     $scope.editor.on("change", function(e) {
+			     	$scope.save();
+			     })
 
 
 
@@ -51,7 +58,7 @@ app.directive('jsTester', ['$compile', function($compile){
 					}
 
 					$scope.save = function() {
-						localStorage.setItem($scope.tester_id + "_js_tester", $scope.editor.getValue());
+						localStorage.setItem($scope.tester_id + $scope.storage_appender, $scope.editor.getValue());
 					}
 
 					$scope.textSize = function(arg) {
@@ -64,10 +71,11 @@ app.directive('jsTester', ['$compile', function($compile){
                        	 size = parseInt(size) -1;
                        	 $scope.editor_ele.css({"font-size":size})
                        }
+                       localStorage.setItem($scope.tester_id + $scope.storage_appender + "_font_size", size)
 					}
 
 					$scope.getValueFromStorage = function() {
-						$scope.editor.setValue(localStorage.getItem($scope.tester_id + "_js_tester"));
+						$scope.editor.setValue(localStorage.getItem($scope.tester_id + $scope.storage_appender));
 					}
 
 
